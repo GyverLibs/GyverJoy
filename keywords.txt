@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map For GyverJoy
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+GyverJoy	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+setPin	KEYWORD2
+invert	KEYWORD2
+setPeriod	KEYWORD2
+calibrate	KEYWORD2
+calibrate	KEYWORD2
+deadzone	KEYWORD2
+exponent	KEYWORD2
+tick	KEYWORD2
+compute	KEYWORD2
+value	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+GJ_LINEAR	LITERAL1
+GJ_SQUARE	LITERAL1
+GJ_CUBIC	LITERAL1
