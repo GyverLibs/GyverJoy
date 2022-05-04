@@ -1,3 +1,5 @@
+This is an automatic translation, may be incorrect in some places. See sources and examples!
+
 # GyverJoy
 Library for convenient work with an analog joystick
 - Works with 10bit ADC (0..1023)
