@@ -78,7 +78,7 @@ public:
         if (val < zero - dead) val = (val - zero + dead) * 255L / (zero - dead);
         else if (val > zero + dead) val = (val - zero - dead) * 255L / (1023 - zero - dead);
         else val = 0;
-		if (inv) val = - val;
+        if (inv) val = - val;
         if (!mode) return val;
 
         bool neg = (val < 0) ? 1 : 0;
