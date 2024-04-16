@@ -64,7 +64,7 @@ public:
     
     // тикер, вызывать в цикле. Опрос по своему таймеру
     bool tick() {
-        if (millis() - tmr >= prd) {
+        if ((uint16_t)((uint16_t)millis() - tmr) >= prd) {
             tmr = millis();
             if (pin != 255) compute(analogRead(pin));
             return true;
@@ -79,12 +79,12 @@ public:
         else if (val > zero + dead) val = (val - zero - dead) * 255L / (1023 - zero - dead);
         else val = 0;
         if (inv) val = - val;
-        if (!mode) return val;
+        if (mode == GJ_LINEAR) return val;
 
         bool neg = (val < 0) ? 1 : 0;
         if (neg) val = -val;
-        if (mode == 1) val = ((uint32_t)val * val + 255) >> 8;
-        else val = ((uint32_t)val * val * val + 130305) >> 16;
+        if (mode == GJ_SQUARE) val = ((uint32_t)(val + 1) * val) >> 8;
+        else val = ((uint32_t)(val + 1) * (val + 1) * val) >> 16;
         if (neg) val = -val;
         return val;
     }
@@ -96,11 +96,11 @@ public:
 
 private:
     bool inv = 0;
-    uint8_t pin, mode = 0;
-    int val = 512;
+    uint8_t pin, mode = GJ_LINEAR;
+    int val = 0;
     int zero = 512, dead = 0;
     uint8_t prd = 10;
-    uint32_t tmr = 0;
+    uint16_t tmr = 0;
 };
 
 #endif
