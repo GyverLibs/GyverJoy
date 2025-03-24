@@ -1,17 +1,3 @@
-/*
-    Библиотека для работы с аналоговой клавиатурой
-    GitHub: https://github.com/GyverLibs/AnalogKey
-    - Встроенный простенький дебаунс
-    - Оптимальный опрос пина по таймеру
-    - Проверка конкретной кнопки или вывод номера нажатой
-    
-    AlexGyver, alex@alexgyver.ru
-    https://alexgyver.ru/
-    MIT License
-    
-    v1.0
-*/
-
 #ifndef _GyverJoy_h
 #define _GyverJoy_h
 #include <Arduino.h>
