@@ -87,10 +87,15 @@ class GyverJoy : public GyverJoyVirt {
         GyverJoyVirt::calibrate(analogRead(pin));
     }
 
-    // тикер, вызывать в цикле. Опрос по своему таймеру
+    // прочитать с пина и сделать расчёт
+    int16_t compute() {
+        return GyverJoyVirt::compute(analogRead(pin));
+    }
+
+    // тикер, вызывать в цикле. Опрос пина по своему таймеру
     bool tick() {
         if (GyverJoyVirt::tick()) {
-            GyverJoyVirt::compute(analogRead(pin));
+            compute();
             return true;
         }
         return false;

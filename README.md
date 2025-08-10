@@ -31,21 +31,70 @@
 <a id="usage"></a>
 
 ## Использование
+### GyverJoyVirt
 ```cpp
 GyverJoyVirt joy;   // виртуальный режим
+```
+```cpp
+// инвертировать (умолч. false)
+void invert(bool ninv);
+
+// установить период опроса (по умолч. 10 мс)
+void setPeriod(uint8_t nprd);
+
+// калибровать "ноль" внешним значением
+void calibrate(uint16_t val);
+
+// установить мёртвую зону
+void deadzone(uint8_t ndead);
+
+// настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
+void exponent(uint8_t nmode);
+
+// тикер, вызывать в цикле. Опрос по своему таймеру
+bool tick();
+
+// ручной опрос внешним значением
+int16_t compute(uint16_t adc);
+
+// получить значение -255.. 255
+int16_t value();
+```
+
+### GyverJoy
+```cpp
 GyverJoy joy(pin);  // с указанием пина АЦП
 ```
 ```cpp
-void setPin(uint8_t npin);      // указать пин
-void invert(bool ninv);         // инвертировать (true)
-void setPeriod(uint8_t nprd);   // период опроса (по умолч. 10 мс)
-void calibrate();               // калибровать "ноль" с пина
-void calibrate(int val);        // калибровать "ноль" внешним значением
-void deadzone(int ndead);       // установить мёртвую зону в единицах АЦП
-void exponent(uint8_t nmode);   // настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
-bool tick();                    // тикер, вызывать в цикле. Опрос по своему таймеру. Вернёт true после чтения
-int compute(int adc);           // ручной опрос внешним значением
-int value();                    // получить последнее значение -255.. 255
+// инвертировать (умолч. false)
+void invert(bool ninv);
+
+// установить период опроса (по умолч. 10 мс)
+void setPeriod(uint8_t nprd);
+
+// калибровать "ноль" внешним значением
+void calibrate(uint16_t val);
+
+// установить мёртвую зону
+void deadzone(uint8_t ndead);
+
+// настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
+void exponent(uint8_t nmode);
+
+// указать пин
+void setPin(uint8_t npin);
+
+// калибровать "ноль" с пина
+void calibrate();
+
+// прочитать с пина и сделать расчёт
+int16_t compute();
+
+// тикер, вызывать в цикле. Опрос пина по своему таймеру
+bool tick();
+
+// получить значение -255.. 255
+int16_t value();
 ```
 
 ![demo](/docs/demo.png)
