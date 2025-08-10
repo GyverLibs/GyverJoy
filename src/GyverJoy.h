@@ -1,92 +1,101 @@
-#ifndef _GyverJoy_h
-#define _GyverJoy_h
+#pragma once
 #include <Arduino.h>
 
 #define GJ_LINEAR 0
 #define GJ_SQUARE 1
 #define GJ_CUBIC 2
 
-class GyverJoy {
-public:
-    // инициализация, можно указать пин
-    GyverJoy(uint8_t npin = 255) {
-        pin = npin;
-    }
-    
-    // указать пин
-    void setPin(uint8_t npin) {
-        pin = npin;
-    }
-    
-    // инвертировать (true)
+class GyverJoyVirt {
+   public:
+    // инвертировать (умолч. false)
     void invert(bool ninv) {
         inv = ninv;
     }
-    
-    // период опроса (по умолч. 10 мс)
+
+    // установить период опроса (по умолч. 10 мс)
     void setPeriod(uint8_t nprd) {
         prd = nprd;
     }
-    
-    // калибровать "ноль" с пина
-    void calibrate() {
-        if (pin != 255) zero = analogRead(pin);
-    }
-    
+
     // калибровать "ноль" внешним значением
-    void calibrate(int val) {
+    void calibrate(uint16_t val) {
         zero = val;
     }
-    
+
     // установить мёртвую зону
-    void deadzone(int ndead) {
+    void deadzone(uint8_t ndead) {
         dead = ndead / 2;
     }
-    
+
     // настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
     void exponent(uint8_t nmode) {
         mode = nmode;
     }
-    
+
     // тикер, вызывать в цикле. Опрос по своему таймеру
     bool tick() {
-        if ((uint16_t)((uint16_t)millis() - tmr) >= prd) {
+        if (uint8_t(uint8_t(millis()) - tmr) >= prd) {
             tmr = millis();
-            if (pin != 255) compute(analogRead(pin));
             return true;
         }
         return false;
     }
-    
+
     // ручной опрос внешним значением
-    int compute(int adc) {
-        val = adc;
-        if (val < zero - dead) val = (val - zero + dead) * 255L / (zero - dead);
-        else if (val > zero + dead) val = (val - zero - dead) * 255L / (1023 - zero - dead);
+    int16_t compute(uint16_t adc) {
+        if (adc < zero - dead) val = int16_t(adc - zero + dead) * 255L / (zero - dead);
+        else if (adc > zero + dead) val = (adc - zero - dead) * 255L / (1023 - zero - dead);
         else val = 0;
-        if (inv) val = - val;
+        if (inv) val = -val;
         if (mode == GJ_LINEAR) return val;
 
-        bool neg = (val < 0) ? 1 : 0;
-        if (neg) val = -val;
-        if (mode == GJ_SQUARE) val = ((uint32_t)(val + 1) * val) >> 8;
-        else val = ((uint32_t)(val + 1) * (val + 1) * val) >> 16;
-        if (neg) val = -val;
-        return val;
-    }
-    
-    // получить значение -255.. 255
-    int value() {
+        int16_t nval = abs(val);
+        if (mode == GJ_SQUARE) nval = (uint32_t(nval + 1) * nval) >> 8;
+        else nval = (uint32_t(nval + 1) * (nval + 1) * nval) >> 16;
+        val = val < 0 ? -nval : nval;
         return val;
     }
 
-private:
+    // получить значение -255.. 255
+    int16_t value() {
+        return val;
+    }
+
+   private:
+    uint16_t zero = 512;
+    int16_t val = 0;
+    uint8_t mode = GJ_LINEAR;
+    uint8_t dead = 0;
+    uint8_t prd = 10, tmr = 0;
     bool inv = 0;
-    uint8_t pin, mode = GJ_LINEAR;
-    int val = 0;
-    int zero = 512, dead = 0;
-    uint8_t prd = 10;
-    uint16_t tmr = 0;
 };
 
-#endif
+class GyverJoy : public GyverJoyVirt {
+   public:
+    // инициализация, можно указать пин
+    GyverJoy(uint8_t npin) {
+        pin = npin;
+    }
+
+    // указать пин
+    void setPin(uint8_t npin) {
+        pin = npin;
+    }
+
+    // калибровать "ноль" с пина
+    void calibrate() {
+        GyverJoyVirt::calibrate(analogRead(pin));
+    }
+
+    // тикер, вызывать в цикле. Опрос по своему таймеру
+    bool tick() {
+        if (GyverJoyVirt::tick()) {
+            GyverJoyVirt::compute(analogRead(pin));
+            return true;
+        }
+        return false;
+    }
+
+   private:
+    uint8_t pin;
+};
