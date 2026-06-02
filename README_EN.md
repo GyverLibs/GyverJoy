@@ -1,145 +1,203 @@
-This is an automatic translation, may be incorrect in some places. See sources and examples!
+This is an automatic translation and may be incorrect in some places. See the source README and examples for authoritative information.
 
-# Gyverjoy
-Library for convenient work with an analog joystick
-- works with 10 bits of ADC (0 .. 1023)
-- virtual mode with an external value of 10 bits
+[![latest](https://img.shields.io/github/v/release/GyverLibs/GyverJoy.svg?color=brightgreen)](https://github.com/GyverLibs/GyverJoy/releases/latest/download/GyverJoy.zip)
+[![PIO](https://badges.registry.platformio.org/packages/gyverlibs/library/GyverJoy.svg)](https://registry.platformio.org/libraries/gyverlibs/GyverJoy)
+[![Foo](https://img.shields.io/badge/Website-AlexGyver.ru-blue.svg?style=flat-square)](https://alexgyver.ru/)
+[![Foo](https://img.shields.io/badge/%E2%82%BD%24%E2%82%AC%20%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%B0%D1%82%D1%8C-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B0-orange.svg?style=flat-square)](https://alexgyver.ru/support_alex/)
+[![Foo](https://img.shields.io/badge/README-ENGLISH-blueviolet.svg?style=flat-square)](https://github-com.translate.goog/GyverLibs/GyverJoy?_x_tr_sl=ru&_x_tr_tl=en)  
+
+[![Foo](https://img.shields.io/badge/ПОДПИСАТЬСЯ-НА%20ОБНОВЛЕНИЯ-brightgreen.svg?style=social&logo=telegram&color=blue)](https://t.me/GyverLibs)
+
+# GyverJoy
+Library for easy work with analog joystick
+- Works with 10 bit ADC (0..1023)
+- Virtual mode with an external value of 10 bits
 - Inversion
-- Calibration of zero
-- Dead zone with linarization of the meaning
-- "Exhibent" for more smooth control
-- Optimized calculations
-- Entrance: 0 .. 1023
-- Exit: -255 .. 255
+- Zero calibration
+- Dead Zone with Linearization of Value
+- Exponent for smoother control
+- Optimized computing
+- Entrance: 0. 1023.
+- Exit: -255. 255
 
-## compatibility
-Compatible with all arduino platforms (used arduino functions)
+### Compatibility
+Compatible with all Arduino platforms (Arduino features are used)
 
-## Content
-- [installation] (# Install)
-- [initialization] (#init)
-- [use] (#usage)
-- [Example] (# Example)
-- [versions] (#varsions)
-- [bugs and feedback] (#fedback)
+## Contents
+- [Installation](#install)
+- [Use of use](#usage)
+- [Example](#example)
+- [Versions](#versions)
+- [Bugs and feedback](#feedback)
 
-<a id="install"> </a>
-## Installation
-- The library can be found by the name ** gyverjoy ** and installed through the library manager in:
-    - Arduino ide
-    - Arduino ide v2
-    - Platformio
-- [download the library] (https://github.com/gyverlibs/gyverjoy/archive/refs/heads/main.zip) .Zip archive for manual installation:
-    - unpack and put in * C: \ Program Files (X86) \ Arduino \ Libraries * (Windows X64)
-    - unpack and put in * C: \ Program Files \ Arduino \ Libraries * (Windows X32)
-    - unpack and put in *documents/arduino/libraries/ *
-    - (Arduino id) Automatic installation from. Zip: * sketch/connect the library/add .Zip library ... * and specify downloaded archive
-- Read more detailed instructions for installing libraries [here] (https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%BD%D0%BE%BE%BE%BED0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
-### Update
-- I recommend always updating the library: errors and bugs are corrected in the new versions, as well as optimization and new features are added
-- through the IDE library manager: find the library how to install and click "update"
-- Manually: ** remove the folder with the old version **, and then put a new one in its place.“Replacement” cannot be done: sometimes in new versions, files that remain when replacing are deleted and can lead to errors!
+<a id="usage"></a>
 
+## Use of use
+### GyverJoyVirt
+```cpp
+GyverJoyVirt joy;   // virtualization
+```
+```cpp
+// invert (silent false)
+void invert(bool ninv);
 
-<a id="init"> </a>
-## initialization
-`` `CPP
-Gyverjoy Joy;// virtual regime
-Gyverjoy Joy (PIN);// indicating Pina ADC
-`` `
+// set the survey period (by omission. 10 ms)
+void setPeriod(uint8_t nprd);
 
-<a id="usage"> </a>
-## Usage
-`` `CPP
-VOID setpin (uint8_t npin);// Indicate the pin
-VOID Invert (Bool Ninv);// Invert (True)
-VOID Setperiod (Uint8_T NPRD);// survey period (default 10 ms)
-VOID Calibrate ();// calibrate "zero" with Pina
-VOID Calibrate (Int Val);// calibrate "zero" external meaning
-Void Deadzone (int ndead);// Install the dead zone in ACP units
-VOID Exponent (Uint8_t Nmode);// Configure the exponent gj_linear (silent), gj_square and gj_cubic or numbers 0, 1 and 2
-Bool Tick ();// ticker, call in the cycle.A survey by its timer.Will return True after reading
-int compute (int Adc);// Manual survey by external value
-int velue ();// get the last value -255 .. 255
-`` `
-! [Demo] (/doc/demo.png)
+// calibrate the "zero" external value n
+void calibrate(uint16_t val);
 
-## Original mode
-Indicate the pin for initialization and call `tick ()` in `loop ()`.By the built -in timer, the joystick will
-To be interpreted, the value can be taken from `velue ()`.Also `tick ()` will return `true` if the calculation occurred.
+// dead- zone
+void deadzone(uint8_t ndead);
 
-### virtual mode
-In case of initialization, it is not necessary to indicate a pin.For calculation, transferexternal value (0 .. 1023) in `compute ()`.The function will return the result according to the settings.
+// configure the exponent GJ LINEAR (silent), GJ SQUARE and GJ CUBIC or numbers 0, 1 and 2
+void exponent(uint8_t nmode);
+
+// ticker, call in the loop. Poll on your own timer
+bool tick();
+
+// hand-examination n
+int16_t compute(uint16_t adc);
+
+// get a value of -255. 255
+int16_t value();
+```
+
+### GyverJoy
+```cpp
+GyverJoy joy(pin);  // pin-marked
+```
+```cpp
+// invert (silent false)
+void invert(bool ninv);
+
+// set the survey period (by omission. 10 ms)
+void setPeriod(uint8_t nprd);
+
+// calibrate the "zero" external value n
+void calibrate(uint16_t val);
+
+// dead- zone
+void deadzone(uint8_t ndead);
+
+// configure the exponent GJ LINEAR (silent), GJ SQUARE and GJ CUBIC or numbers 0, 1 and 2
+void exponent(uint8_t nmode);
+
+// pin
+void setPin(uint8_t npin);
+
+// calibrate zero from pin
+void calibrate();
+
+// Read from the pin and make a calculation
+int16_t compute();
+
+// ticker, call in the loop. Pin poll on his own timer
+bool tick();
+
+// get a value of -255. 255
+int16_t value();
+```
+
+![demo](/docs/demo.png)
+
+### Regular regime
+Point the pin at initialization and call`tick()`into`loop()`. On the built-in timer joystick will be
+The value can be taken from the`value()`. Also.`tick()`return`true`If there's been a calculation.
+
+### Virtual mode
+When initializing, you do not need to specify a pin. To calculate, transfer the external value (0..1023) to`compute()`. The function will return the result according to the settings.
 
 ### Settings
-- `Invert
-- `Calibrate` reads * current * signal value and considers it for" zero "joystick
-- `Deadzone` sets the dead area, but values are recalculated and linearity is preserved
-- `Exponent` sets the" exponential "transformation of the value for more smooth control
+- `invert`invert
+- `calibrate`reads the *current* value of the signal and counts it as "zero" joystick
+- `deadzone`establishes a dead zone, but values are recalculated and linearity is maintained
+- `exponent`specifies an “exponential” value conversion for smoother control
 
-`Deadzone` and` Exponent` can be used together!The exponent will be considered from the edges of the dead zone.
+`deadzone`and`exponent`It can be shared! The exhibit will be counted from the edges of the dead zone.
 
-<a id="EXAMPLE"> </a>
+<a id="example"></a>
+
 ## Example
-## board ADC
-`` `CPP
-#include <gyverjoy.h>
-Gyverjoy JX (0);// joystick on pin 0
+### Airborne ADC
+```cpp
+#include <GyverJoy.h>
+GyverJoy jx(0);  // joystick
 
-VOID setup () {
-  Serial.Begin (9600);
-  //jx.invertration);// Invert
-  jx.calibrate ();// Calibration of zero at launch
-  JX.deadzone (30);// dead zone
-  jx.exponent (gj_cubic);// Exhibitment for smoothness
+void setup() {
+    Serial.begin(9600);
+    // jx.invert(true); invert
+    jx.calibrate();         // zero-calibration
+    jx.deadzone(30);        // dead-zone
+    jx.exponent(GJ_CUBIC);  // exponent
 }
 
-VOID loop () {
-  // ticker interviews ADC according to its timer
-  if (jx.tick ()) {
-    // We display the meaning
-    Serial.println (jx.value ());
-  }
+void loop() {
+    // ticker polls ADC on its timer
+    if (jx.tick()) {
+        // point out
+        Serial.println(jx.value());
+    }
 }
-`` `
+```
 
-### virtual mode
-`` `CPP
-#include <gyverjoy.h>
-Gyverjoy JX;// Virtual joystick
+### Virtual mode
+```cpp
+#include <GyverJoy.h>
+GyverJoyVirt jx;  // joystick
 
-VOID setup () {
-  Serial.Begin (9600);
-  //jx.invertration);// Invert
-  // Calibration by external value
-  JX.Calibrate (ANALOGREAD (0));
-  JX.deadzone (30);// dead zone
-  jx.exponent (gj_cubic);// Exhibitment for smoothness
+void setup() {
+    Serial.begin(9600);
+    // jx.invert(true); invert
+    //  calibration n
+    jx.calibrate(analogRead(0));
+    jx.deadzone(30);        // dead-zone
+    jx.exponent(GJ_CUBIC);  // exponent
 }
 
-VOID loop () {
-  // We transmit an analog signal from any source
-  int velue = jx.compute (analogread (0));
-  Serial.println (value);
-  Delay (10);
+void loop() {
+    // transmitting an analog signal from any source
+    int value = jx.compute(analogRead(0));
+    Serial.println(value);
+    delay(10);
 }
-`` `
 
-<a id="versions"> </a>
-## versions
-- V1.0
+```
 
-<a id="feedback"> </a>
-## bugs and feedback
-Create ** Issue ** when you find the bugs, and better immediately write to the mail [alex@alexgyver.ru] (mailto: alex@alexgyver.ru)
-The library is open for refinement and your ** pull Request ** 'ow!
+<a id="versions"></a>
+## Versions
+- v1.0
+- v1.1 - reverse calibration corrected, cubic gamma corrected at zero signal
 
+<a id="install"></a>
 
-When reporting about bugs or incorrect work of the library, it is necessary to indicate:
-- The version of the library
-- What is MK used
+## Installation
+- The library can be found under the name **GyverJoy** and installed through the library manager in:
+    - Arduino IDE
+    - Arduino IDE v2
+    - PlatformIO
+- [Download the library](https://github.com/GyverLibs/GyverJoy/archive/refs/heads/main.zip).zip archive for manual installation:
+    - Unpack and put in *C:\Program Files (x86)\Arduino\libraries* (Windows x64)
+    - Unpack and put in *C:\Program Files\Arduino\libraries* (Windows x32)
+    - Unpack and put in *Documents/Arduino/libraries/ *
+    - (Arduino IDE) Automatic installation from .zip: *Sketch/Connect library/Add .ZIP library...* and specify downloaded archive
+- Read more detailed instructions for installing libraries[here](https://alexgyver.ru/arduino-first/#%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0_%D0%B1%D0%B8%D0%B1%D0%BB%D0%B8%D0%BE%D1%82%D0%B5%D0%BA)
+### Update
+- I recommend always updating the library: new versions fix errors and bugs, as well as optimize and add new features.
+- Through the library manager IDE: find the library as when installing and click "Update"
+- Manually: **Delete the folder with the old version** and then put the new one in its place. “Replacement” can not be done: sometimes new versions delete files that will remain when replaced and can lead to errors!
+
+<a id="feedback"></a>
+
+## Bugs and feedback
+If you find bugs, create **Issue**, or better write to the mail immediately.[alex@alexgyver.ru](mailto:alex@alexgyver.ru)  
+The library is open for revision and your **Pull Requests*!
+
+When reporting bugs or incorrect work of the library, it is necessary to specify:
+- Library version
+- What is used by the IC
 - SDK version (for ESP)
-- version of Arduino ide
-- whether the built -in examples work correctly, in which the functions and designs are used, leading to a bug in your code
-- what code has been loaded, what work was expected from it and how it works in reality
-- Ideally, attach the minimum code in which the bug is observed.Not a canvas of a thousand lines, but a minimum code
+- Arduino IDE version
+- Are embedded examples that use features and designs that cause bugs in your code working correctly?
+- What code was downloaded, what work was expected from it and how it works in reality
+- Ideally, attach the minimum code in which the bug is observed. Not a canvas of a thousand lines, but a minimum code.
