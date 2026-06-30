@@ -48,8 +48,8 @@ void calibrate(uint16_t val);
 // установить мёртвую зону
 void deadzone(uint8_t ndead);
 
-// настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
-void exponent(uint8_t nmode);
+// настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE или GJ_CUBIC
+void exponent(GJTYPE nmode);
 
 // тикер, вызывать в цикле. Опрос по своему таймеру
 bool tick();
@@ -78,8 +78,8 @@ void calibrate(uint16_t val);
 // установить мёртвую зону
 void deadzone(uint8_t ndead);
 
-// настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
-void exponent(uint8_t nmode);
+// настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE или GJ_CUBIC
+void exponent(GJTYPE nmode);
 
 // указать пин
 void setPin(uint8_t npin);

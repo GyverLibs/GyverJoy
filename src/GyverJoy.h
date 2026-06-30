@@ -1,9 +1,11 @@
 #pragma once
 #include <Arduino.h>
 
-#define GJ_LINEAR 0
-#define GJ_SQUARE 1
-#define GJ_CUBIC 2
+enum GJTYPE : uint8_t {
+    GJ_LINEAR,
+    GJ_SQUARE,
+    GJ_CUBIC,
+};
 
 class GyverJoyVirt {
    public:
@@ -27,8 +29,8 @@ class GyverJoyVirt {
         dead = ndead / 2;
     }
 
-    // настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE и GJ_CUBIC или цифрами 0, 1 и 2
-    void exponent(uint8_t nmode) {
+    // настроить экспоненту GJ_LINEAR (умолч.), GJ_SQUARE или GJ_CUBIC
+    void exponent(GJTYPE nmode) {
         mode = nmode;
     }
 
@@ -43,7 +45,7 @@ class GyverJoyVirt {
 
     // ручной опрос внешним значением
     int16_t compute(uint16_t adc) {
-        if (adc < zero - dead) val = int16_t(adc - zero + dead) * 255L / (zero - dead);
+        if (adc + dead < zero) val = int16_t(adc - zero + dead) * 255L / (zero - dead);
         else if (adc > zero + dead) val = (adc - zero - dead) * 255L / (1023 - zero - dead);
         else val = 0;
         if (inv) val = -val;
@@ -64,7 +66,7 @@ class GyverJoyVirt {
    private:
     uint16_t zero = 512;
     int16_t val = 0;
-    uint8_t mode = GJ_LINEAR;
+    GJTYPE mode = GJ_LINEAR;
     uint8_t dead = 0;
     uint8_t prd = 10, tmr = 0;
     bool inv = 0;

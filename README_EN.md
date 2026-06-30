@@ -50,8 +50,8 @@ void calibrate(uint16_t val);
 // dead- zone
 void deadzone(uint8_t ndead);
 
-// configure the exponent GJ LINEAR (silent), GJ SQUARE and GJ CUBIC or numbers 0, 1 and 2
-void exponent(uint8_t nmode);
+// configure the exponent: GJ_LINEAR (default), GJ_SQUARE, or GJ_CUBIC
+void exponent(GJTYPE nmode);
 
 // ticker, call in the loop. Poll on your own timer
 bool tick();
@@ -80,8 +80,8 @@ void calibrate(uint16_t val);
 // dead- zone
 void deadzone(uint8_t ndead);
 
-// configure the exponent GJ LINEAR (silent), GJ SQUARE and GJ CUBIC or numbers 0, 1 and 2
-void exponent(uint8_t nmode);
+// configure the exponent: GJ_LINEAR (default), GJ_SQUARE, or GJ_CUBIC
+void exponent(GJTYPE nmode);
 
 // pin
 void setPin(uint8_t npin);
